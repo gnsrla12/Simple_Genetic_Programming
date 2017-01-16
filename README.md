@@ -23,7 +23,8 @@ Following ternimal and non-terminal nodes for GP, and corresponding symbols when
 -  Unary Operators: ⇠ (unary minus), abs, sin, cos, tan, asin, acos, atan, sinh, cosh,
 tanh, exp, sqrt, log
 -  Binary Operators: +, -, *, /,ˆ(power)
--  
+
+
 ```sh
 # For example, x24   sin( 2x3) would be represented by x24 2 ^ 2 ~ x3 * sin -.
 # in directory "Simple_Genetic_Programming/"
@@ -42,23 +43,23 @@ The program was run on azure server with 5 different instances. After 3 days of 
 
 # 6. Detailed Explanation of the CODE
 
-test.py takes two inputs: the evolved RPN expression in one string, and a .csv file containing the test data. Subsequently, it evaluates the given RPN expression on the test data and print out the MSE. 
+1. test.py takes two inputs: the evolved RPN expression in one string, and a .csv file containing the test data. Subsequently, it evaluates the given RPN expression on the test data and print out the MSE. 
 Stack was used to evaluate the expression in reverse polish notation.
 
-train.py 
+2. train.py 
 “train.py” takes a .csv file containing the training data as input, and prints out the evolved expression using Reverse Polish Notation. 
 
-“tree” class represents each expression. “tree” has 4 elements. “left”, “right”, “data” and “depth”. “left” and “right” can point to another tree and data contains operator or terminal data. “depth” refers to how deep the current node is located at.
+    “tree” class represents each expression. “tree” has 4 elements. “left”, “right”, “data” and “depth”. “left” and “right” can point to another tree and data contains operator or terminal data. “depth” refers to how deep the current node is located at.
 
-First, 2 initial population of programs are created, “trees1” and “trees2”. Half of the trees in each population (“trees1” and “trees2”) are created using full grow method, and the other half using random grow method.
+    First, 2 initial population of programs are created, “trees1” and “trees2”. Half of the trees in each population (“trees1” and “trees2”) are created using full grow method, and the other half using random grow method.
 
-Next, genetic operations are repeatedly applied to “trees1” and “trees2” until the termination condition is met. These two populations will later be merged into one population “trees3”. I believe this approach can increase the diversity of population.
+    Next, genetic operations are repeatedly applied to “trees1” and “trees2” until the termination condition is met. These two populations will later be merged into one population “trees3”. I believe this approach can increase the diversity of population.
 
-1 iteration of genetic operation does the following. First, it sorts the “trees” regarding to its fitness function in increasing manner. Then, 2 trees that are in the first quarter of the “trees” are randomly selected. Next, Mutation and Crossover are applied to these two trees (Detailed explanation of Mutation and Crossover is in the following paragraphs). If the result tree exceeds the “max_depth”, it repeats the Mutation and Crossover process until it doesn’t exceed. This is to restrict the depth of each trees, since deep trees increases computation time exponentially. Iteration of genetic operations are terminated when the termination condition is met. 
+    1 iteration of genetic operation does the following. First, it sorts the “trees” regarding to its fitness function in increasing manner. Then, 2 trees that are in the first quarter of the “trees” are randomly selected. Next, Mutation and Crossover are applied to these two trees (Detailed explanation of Mutation and Crossover is in the following paragraphs). If the result tree exceeds the “max_depth”, it repeats the Mutation and Crossover process until it doesn’t exceed. This is to restrict the depth of each trees, since deep trees increases computation time exponentially. Iteration of genetic operations are terminated when the termination condition is met. 
 
-Crossover of “tree_a” and “tree_b” does the following. First it selects a random node in each trees excluding the terminal nodes. Then it swaps the one of the selected node’s child with the other selected node’s child. 
+    Crossover of “tree_a” and “tree_b” does the following. First it selects a random node in each trees excluding the terminal nodes. Then it swaps the one of the selected node’s child with the other selected node’s child. 
 
-Mutation of “tree” does the following. First it selects a random node in the “tree” including the terminal nodes. Next, with 50%/50% chance, subtree mutation or point mutation is applied. Point mutation changes the selected node’s randomly to another data in the same group. Subtree mutation replaces the selected node with completely new tree. This is done by random grow initialization method or full grow initialization method with 50%/50% chance (Ramped Half and Half initialization method).
+    Mutation of “tree” does the following. First it selects a random node in the “tree” including the terminal nodes. Next, with 50%/50% chance, subtree mutation or point mutation is applied. Point mutation changes the selected node’s randomly to another data in the same group. Subtree mutation replaces the selected node with completely new tree. This is done by random grow initialization method or full grow initialization method with 50%/50% chance (Ramped Half and Half initialization method).
 
-When genetic operation for “trees1” and “trees2” are finished, these two populations are merged into “trees3”. Then, final while-loop of genetic operation is applied to the “trees3”. Then, the program prints the final expression.
+    When genetic operation for “trees1” and “trees2” are finished, these two populations are merged into “trees3”. Then, final while-loop of genetic operation is applied to the “trees3”. Then, the program prints the final expression.
 
